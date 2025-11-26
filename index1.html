@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Careers Hub - Find Your Dream Job</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.6s ease;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .search-wrapper {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            outline: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .search-bar:focus {
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-wrapper {
+            min-width: 200px;
+        }
+
+        .category-dropdown {
+            width: 100%;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            background: white;
+            cursor: pointer;
+            outline: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .category-dropdown:hover {
+            transform: scale(1.02);
+        }
+
+        /* Jobs Grid */
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            animation: fadeIn 1s ease;
+            margin-bottom: 30px;
+        }
+
+        /* Job Card */
+        .job-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: slideUp 0.5s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .job-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .job-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .job-card.hidden {
+            display: none;
+        }
+
+        .job-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .company-logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        .job-title {
+            font-size: 1.3rem;
+            color: #2d3748;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .company-name {
+            color: #718096;
+            font-size: 0.95rem;
+        }
+
+        .job-meta {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .job-tag {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #edf2f7;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            color: #4a5568;
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .job-description {
+            color: #4a5568;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+
+        .skills {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .skill-tag {
+            padding: 5px 10px;
+            background: #e6fffa;
+            color: #234e52;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .apply-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .apply-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+            animation: slideUp 0.4s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 2rem;
+            color: #718096;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-btn:hover {
+            color: #2d3748;
+        }
+
+        .modal-header {
+            border-bottom: 2px solid #edf2f7;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .modal-company {
+            font-size: 1.1rem;
+            color: #718096;
+        }
+
+        .modal-section {
+            margin-bottom: 25px;
+        }
+
+        .modal-section h3 {
+            font-size: 1.2rem;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+
+        .modal-section p,
+        .modal-section ul {
+            color: #4a5568;
+            line-height: 1.8;
+        }
+
+        .modal-section ul {
+            padding-left: 20px;
+        }
+
+        .modal-section ul li {
+            margin-bottom: 8px;
+        }
+
+        /* No Results */
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+            font-size: 1.3rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .filter-section {
+                flex-direction: column;
+            }
+            
+            .search-wrapper,
+            .category-wrapper {
+                width: 100%;
+            }
+            
+            .jobs-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .modal-content {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .header {
+                margin-bottom: 25px;
+            }
+            
+            .header h1 {
+                font-size: 1.6rem;
+            }
+            
+            .subtitle {
+                font-size: 0.95rem;
+            }
+            
+            .job-title {
+                font-size: 1.1rem;
+            }
+            
+            .job-card {
+                padding: 20px;
+            }
+            
+            .search-bar,
+            .category-dropdown {
+                padding: 12px 18px;
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <header class="header">
+            <h1>🚀 Tech Careers Hub</h1>
+            <p class="subtitle">Discover amazing opportunities in tech</p>
+        </header>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="search-wrapper">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    class="search-bar" 
+                    placeholder="Search by role, keyword, or skill..."
+                >
+            </div>
+            
+            <div class="category-wrapper">
+                <select id="categoryFilter" class="category-dropdown">
+                    <option value="all">All Categories</option>
+                    <option value="frontend">Frontend</option>
+                    <option value="backend">Backend</option>
+                    <option value="design">Design</option>
+                    <option value="data">Data</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Job Cards Grid -->
+        <div class="jobs-grid" id="jobsGrid">
+            <!-- Job cards will be dynamically inserted here -->
+        </div>
+
+        <!-- No Results Message -->
+        <div class="no-results" id="noResults" style="display: none;">
+            <p>😔 No jobs found matching your criteria</p>
+        </div>
+    </div>
+
+    <!-- Modal Popup -->
+    <div class="modal" id="jobModal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModal">&times;</span>
+            <div class="modal-body" id="modalBody">
+                <!-- Job details will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Job Data
+        const jobs = [
+            {
+                id: 1,
+                title: "Frontend Developer",
+                company: "TechCorp Solutions",
+                logo: "TC",
+                category: "frontend",
+                location: "Remote",
+                type: "Full-time",
+                description: "Build stunning user interfaces and create seamless user experiences for our cutting-edge web applications.",
+                skills: ["React", "JavaScript", "CSS", "TypeScript"],
+                responsibilities: [
+                    "Develop responsive web applications using React and modern JavaScript",
+                    "Collaborate with designers to implement pixel-perfect UI designs",
+                    "Optimize applications for maximum speed and scalability",
+                    "Write clean, maintainable, and well-documented code"
+                ],
+                requirements: [
+                    "2+ years of experience with React and JavaScript",
+                    "Strong understanding of HTML5, CSS3, and responsive design",
+                    "Experience with state management libraries (Redux, Context API)",
+                    "Excellent problem-solving skills and attention to detail"
+                ],
+                salary: "$80,000 - $120,000",
+                experience: "2-4 years"
+            },
+            {
+                id: 2,
+                title: "Backend Engineer",
+                company: "DataFlow Systems",
+                logo: "DF",
+                category: "backend",
+                location: "Hybrid",
+                type: "Full-time",
+                description: "Design and implement robust backend systems that power our data-driven applications.",
+                skills: ["Node.js", "Python", "MongoDB", "PostgreSQL"],
+                responsibilities: [
+                    "Design and develop scalable RESTful APIs and microservices",
+                    "Implement database schemas and optimize query performance",
+                    "Ensure security best practices across all backend systems",
+                    "Collaborate with frontend teams to integrate services"
+                ],
+                requirements: [
+                    "3+ years of backend development experience",
+                    "Proficiency in Node.js, Python, or similar languages",
+                    "Strong knowledge of database design and optimization",
+                    "Experience with cloud platforms (AWS, Azure, or GCP)"
+                ],
+                salary: "$90,000 - $140,000",
+                experience: "3-5 years"
+            },
+            {
+                id: 3,
+                title: "UI/UX Designer",
+                company: "Creative Labs",
+                logo: "CL",
+                category: "design",
+                location: "On-site",
+                type: "Full-time",
+                description: "Create beautiful, intuitive designs that delight users and drive business results.",
+                skills: ["Figma", "Adobe XD", "Sketch", "Prototyping"],
+                responsibilities: [
+                    "Design user interfaces for web and mobile applications",
+                    "Create wireframes, prototypes, and high-fidelity mockups",
+                    "Conduct user research and usability testing",
+                    "Collaborate with developers to ensure design implementation"
+                ],
+                requirements: [
+                    "2+ years of UI/UX design experience",
+                    "Expert knowledge of Figma, Sketch, or Adobe XD",
+                    "Strong portfolio demonstrating design thinking",
+                    "Understanding of design systems and component libraries"
+                ],
+                salary: "$70,000 - $110,000",
+                experience: "2-4 years"
+            },
+            {
+                id: 4,
+                title: "Data Scientist",
+                company: "AI Innovations",
+                logo: "AI",
+                category: "data",
+                location: "Remote",
+                type: "Full-time",
+                description: "Leverage machine learning and data analysis to extract insights and drive strategic decisions.",
+                skills: ["Python", "Machine Learning", "SQL", "TensorFlow"],
+                responsibilities: [
+                    "Build and deploy machine learning models for predictive analytics",
+                    "Analyze large datasets to identify trends and insights",
+                    "Develop data pipelines and automate data processing",
+                    "Present findings to stakeholders through visualizations"
+                ],
+                requirements: [
+                    "3+ years of experience in data science or analytics",
+                    "Strong programming skills in Python and SQL",
+                    "Experience with ML frameworks (TensorFlow, PyTorch, scikit-learn)",
+                    "Excellent communication and data storytelling skills"
+                ],
+                salary: "$100,000 - $150,000",
+                experience: "3-6 years"
+            }
+        ];
+
+        // DOM Elements
+        const jobsGrid = document.getElementById('jobsGrid');
+        const searchInput = document.getElementById('searchInput');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const jobModal = document.getElementById('jobModal');
+        const closeModal = document.getElementById('closeModal');
+        const modalBody = document.getElementById('modalBody');
+        const noResults = document.getElementById('noResults');
+
+        // Initialize page
+        function init() {
+            renderJobs(jobs);
+            setupEventListeners();
+        }
+
+        // Render job cards
+        function renderJobs(jobsToRender) {
+            jobsGrid.innerHTML = '';
+            
+            if (jobsToRender.length === 0) {
+                noResults.style.display = 'block';
+                return;
+            }
+            
+            noResults.style.display = 'none';
+            
+            jobsToRender.forEach((job, index) => {
+                const jobCard = createJobCard(job, index);
+                jobsGrid.appendChild(jobCard);
+            });
+        }
+
+        // Create individual job card
+        function createJobCard(job, index) {
+            const card = document.createElement('div');
+            card.className = 'job-card';
+            card.style.animationDelay = `${index * 0.1}s`;
+            
+            card.innerHTML = `
+                <div class="job-header">
+                    <div class="company-logo">${job.logo}</div>
+                    <div>
+                        <h3 class="job-title">${job.title}</h3>
+                        <p class="company-name">${job.company}</p>
+                    </div>
+                </div>
+                
+                <div class="job-meta">
+                    <span class="category-badge">${job.category.charAt(0).toUpperCase() + job.category.slice(1)}</span>
+                    <span class="job-tag">📍 ${job.location}</span>
+                    <span class="job-tag">⏰ ${job.type}</span>
+                </div>
+                
+                <p class="job-description">${job.description}</p>
+                
+                <div class="skills">
+                    ${job.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+                </div>
+                
+                <button class="apply-btn" onclick="openModal(${job.id})">Apply Now</button>
+            `;
+            
+            return card;
+        }
+
+        // Filter jobs based on search and category
+        function filterJobs() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const selectedCategory = categoryFilter.value;
+            
+            const filteredJobs = jobs.filter(job => {
+                const matchesSearch = 
+                    job.title.toLowerCase().includes(searchTerm) ||
+                    job.company.toLowerCase().includes(searchTerm) ||
+                    job.description.toLowerCase().includes(searchTerm) ||
+                    job.skills.some(skill => skill.toLowerCase().includes(searchTerm));
+                
+                const matchesCategory = 
+                    selectedCategory === 'all' || 
+                    job.category === selectedCategory;
+                
+                return matchesSearch && matchesCategory;
+            });
+            
+            renderJobs(filteredJobs);
+        }
+
+        // Open modal with job details
+        function openModal(jobId) {
+            const job = jobs.find(j => j.id === jobId);
+            
+            if (!job) return;
+            
+            modalBody.innerHTML = `
+                <div class="modal-header">
+                    <h2 class="modal-title">${job.title}</h2>
+                    <p class="modal-company">${job.company}</p>
+                    <div class="job-meta" style="margin-top: 15px;">
+                        <span class="category-badge">${job.category.charAt(0).toUpperCase() + job.category.slice(1)}</span>
+                        <span class="job-tag">📍 ${job.location}</span>
+                        <span class="job-tag">⏰ ${job.type}</span>
+                    </div>
+                </div>
+                
+                <div class="modal-section">
+                    <h3>💰 Salary Range</h3>
+                    <p>${job.salary}</p>
+                </div>
+                
+                <div class="modal-section">
+                    <h3>📊 Experience Required</h3>
+                    <p>${job.experience}</p>
+                </div>
+                
+                <div class="modal-section">
+                    <h3>📝 About the Role</h3>
+                    <p>${job.description}</p>
+                </div>
+                
+                <div class="modal-section">
+                    <h3>🔧 Required Skills</h3>
+                    <div class="skills">
+                        ${job.skills.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+                    </div>
+                </div>
+                
+                <div class="modal-section">
+                    <h3>✅ Key Responsibilities</h3>
+                    <ul>
+                        ${job.responsibilities.map(resp => `<li>${resp}</li>`).join('')}
+                    </ul>
+                </div>
+                
+                <div class="modal-section">
+                    <h3>🎯 Requirements</h3>
+                    <ul>
+                        ${job.requirements.map(req => `<li>${req}</li>`).join('')}
+                    </ul>
+                </div>
+                
+                <button class="apply-btn" onclick="alert('Application submitted! (This is a demo)')">
+                    Submit Application
+                </button>
+            `;
+            
+            jobModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close modal
+        function closeModalWindow() {
+            jobModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            searchInput.addEventListener('input', filterJobs);
+            categoryFilter.addEventListener('change', filterJobs);
+            closeModal.addEventListener('click', closeModalWindow);
+            
+            // Close modal when clicking outside
+            jobModal.addEventListener('click', (e) => {
+                if (e.target === jobModal) {
+                    closeModalWindow();
+                }
+            });
+            
+            // Close modal on Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && jobModal.classList.contains('active')) {
+                    closeModalWindow();
+                }
+            });
+        }
+
+        // Initialize the application
+        init();
+    </script>
+</body>
+</html>
